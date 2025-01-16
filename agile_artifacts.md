@@ -8,7 +8,10 @@
 2. database and associated dependencies 
 ## Sprint Review (Focus on project management)
 ### what challenges did you have ###
+git bash was very annoying to install and link (using local vscode)
 
+Time could be more efficiently spent on getting sprints done quicker (I don't feel like i am being productive enough)
 ### what did you do well ###
-
+not overthinking or doing excess of sprint scope
 ### What will you do differently next time ###
+work more effectively
