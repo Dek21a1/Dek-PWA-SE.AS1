@@ -1,7 +1,32 @@
 {% extends "layout.html" %} {% block content %}
 
-<h1>
-    SUCCESS
-</h1>
+<div>
+    <h1>
+        Welcome to Dev Web, {{ User }}
+    </h1>
+    {% if not log %}
+    <h3>
+        you are not part of a team, use the button below to manage them
+    </h3>
+    <a class="btn btn-primary" href="team_manage.html" role="button">
+        manage teams
+    </a>
+    {% else %}
+    {% for row in log %}
+    <div class="card" style="width: 18rem;">
+        <div class="card-body">
+            <h5 class="card-title">{{ row[3] }}</h5>
+            <h6 class="card-subtitle">{{ row[2] }}</h6>
+            <p class="card-body">submitted by: {{ row[0] }}</p>
+            <p class="card-body">{{ row[1] }}</p>
+            <a class="card-info">
+            <button class="btn btn-primary">details</button></a>
+        </div>
+    </div>
+    {% endfor %}
+    {% endif %}
+
+
+</div>
 
 {% endblock %}

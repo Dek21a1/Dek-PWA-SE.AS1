@@ -1,0 +1,23 @@
+{% extends "layout.html" %} {% block content %}
+
+<div>
+    <h1>
+        your teams
+    </h1>
+    {% for row in teams %}
+    {% if row[2] == 'request' %}
+    <div class="card" style="width: 18rem;">
+        <div class="card-body">
+            <h5 class="card-title">request to join team {{ row[1] }}</h5>
+    {% else %}
+    <div class="card" style="width: 18rem;">
+        <div class="card-body">
+            <h5 class="card-title">in team {{ row[1] }}</h5>
+            <h6 class="card-subtitle"> role: {{ row[2] }}</h6>
+    {% endif %}
+    {% endfor %}
+    </div>
+</div>
+
+ 
+{% endblock %}
