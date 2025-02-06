@@ -29,6 +29,7 @@ def login():
             session['status'] = response
             session['mail'] = email
             session['key'] = app.config["SECRET_KEY"]
+            session['logs'] = False
             dbHandler.update_session(email, session['key'])
             return home()
         else: 
@@ -54,23 +55,11 @@ def signup():
 
 @app.route('/home.html', methods=['GET'])
 def home():
-    email = session['mail']
-    user = dbHandler.get_user(email)
-    id = dbHandler.get_teams(email)
-    devlog = dbHandler.get_log(id)
-    if not devlog:
-        return render_template('/home.html', cred=session['status'], User=user, log=False)
-    else:
-        return render_template('/home.html', cred=session['status'], User=user, log=devlog)
-
-
-@app.route('/submit_log.html', methods=['GET', 'POST'])
-def submit():
-    if request.method=="POST":
-        log_title = request.form['title']
-        log_subtitle = request.form['about']
-        log_info = request.form['info']
-        team = request.form['team_name']
+        email = session['mail']
+        devlog = session['logs']
+        user = dbHandler.get_user(email)
+        id = dbHandler.get_teams(email)
+        return render_template('/home.html', cred=session['status'], User=user, teams=id, log=devlog)
 
 
 @app.route('/sign_out')
@@ -87,6 +76,79 @@ def manage_team():
     else:
         id = dbHandler.perm_level(session['mail'])
         return render_template('/team_manage.html', cred=session['status'], team=id)
+    
+@app.route('/accept_team.html', methods=['POST'])
+def accept_team():
+    if request.method=="POST":
+        team = request.form['name']
+        invite = request.form['role']
+        user = session['mail']
+        if invite == 'request':
+            dbHandler.accept_team(team, user)
+            return manage_team()
+    
+@app.route('/invite_user.html', methods=['POST'])
+def invite_user():
+    if request.method=="POST":
+        name = request.form['team']
+        invite = request.form['user']
+        clearance = 'request'
+        dbHandler.create_team(name, invite, clearance)
+        return manage_team()
+
+@app.route('/create_team.html', methods=['POST'])
+def create_team():
+    if request.method=="POST":
+        team = request.form['name']
+        user = session['mail']
+        clearance = 'manager'
+        dbHandler.create_team(team, user, clearance)
+        return manage_team()
+    
+@app.route('/view_log.html', methods=['POST', 'GET'])
+def view_log():
+    if request.method=="POST":
+        title = request.form['titlelog']
+        subtitle = request.form['subtitlelog']
+        date = request.form['timestamp']
+        user = request.form['id']
+        view = dbHandler.match_log(user, date, title, subtitle)
+        return render_template('/view_log.html', log=view, cred=session['status'])
+    
+@app.route('/submitlog.html', methods=['POST', 'GET'])
+def submit_log():
+    email = session['mail']
+    id = dbHandler.get_teams(email)    
+    if request.method=="POST":
+        return render_template('/submitlog.html', cred=session['status'], teams=id)
+    else:
+        return render_template('/submitlog.html', cred=session['status'], teams=id)
+    
+@app.route('/getlog.html', methods=['POST'])
+def get_log():
+    if request.method=="POST":
+        team = request.form['name']
+        devlog = dbHandler.get_log(team)
+        session['logs'] = devlog
+        return home()
+    
+@app.route('/get_teams.html', methods=['POST'])
+def get_teams():
+    if request.method=="POST":
+        user = dbHandler.get_user(session['mail'])
+        title_log = request.form['title']
+        subtitle_log = request.form['subtitle']
+        log_info = request.form['log']
+        date = request.form['timestamp']
+        team = session['team']
+        dbHandler.insert_log(user, team, date, title_log, subtitle_log, log_info)
+        session.pop('team', None)
+        
+@app.route('/team.html', methods=['POST'])
+def team_name():
+    if request.method=="POST":
+        team = request.form['name']
+        session['team'] = team
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)

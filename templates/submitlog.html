@@ -1,0 +1,38 @@
+{% extends "layout.html" %} {% block content %}
+
+<div class="container me-auto">
+    <div class="dropdown">
+            <a class="btn btn-secondary dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                select team
+            </a>
+            <ul class="dropdown-menu">
+                {% for row in teams %}
+                <form action="team.html" method="POST">
+                <li><button class="dropdown-item" type="submit">{{ row[0] }}</button></li>
+                <input type="hidden" name="name" value="{{ row[0] }}">     
+                </form>
+                {% endfor %}
+            </ul>
+        </div>
+    <form action="get_teams.html" method="POST">
+        <div class="mb-3">
+            <label for="title" class="form-label">title</label>
+            <input type="text" class="form-control" name="title">
+        </div>
+        <div class="mb-3">
+            <label for="subtitle" class="form-label">subtitle</label>
+            <input type="text" class="form-control" name="subtitle">
+        </div>
+        <div class="mb-3">
+            <label for="log" class="form-label">log</label>
+            <textarea class="form-control" name="log" rows="3"></textarea>
+        </div>
+        <div class="mb-3">
+            <label for="date" class="form-label">date</label>
+            <input type="date" class="form-control" name="timestamp" placeholder="dd/mm/yyyy 24:00">
+        </div>
+        <button type="submit" class="btn btn-primary">submit</button>
+    </form>
+</div>
+
+{% endblock %}

@@ -1,22 +1,60 @@
 {% extends "layout.html" %} {% block content %}
 
-<div>
+<div class="row">
+    <div class="col-4 container">
     <h1>
         your teams
-    </h1>
-    {% for row in teams %}
-    {% if row[2] == 'request' %}
-    <div class="card" style="width: 18rem;">
+    </h1>   
+    </div>
+    <div class="col-8 padding-box">
+    {% for row in team %}
+    {% if row[0] == "request" %}
+    <div class="card" style="width: 18rem; height:10rem;">
+        <form action="accept_team.html"  method="POST">
         <div class="card-body">
             <h5 class="card-title">request to join team {{ row[1] }}</h5>
-    {% else %}
-    <div class="card" style="width: 18rem;">
+            <input type="hidden" name="name" value="{{ row[1] }}">
+            <input type="hidden" name="role" value="{{ row[0] }}">
+            <button class="btn btn-primary" type="submit">accept</button>
+        </div>
+        </form>
+    </div>
+    {% elif row[0] == "editor" %}
+    <div class="card" style="width: 18rem; height:10rem;">
         <div class="card-body">
-            <h5 class="card-title">in team {{ row[1] }}</h5>
-            <h6 class="card-subtitle"> role: {{ row[2] }}</h6>
+            <h5 class="card-title">{{ row[1] }}</h5>
+            <h6 class="card-subtitle"> role: {{ row[0] }}</h6>
+        </div>   
+    </div>
+    {% else %}
+    <div class="card" style="width: 18rem; height:10rem;">
+        <div class="card-body">
+            <h5 class="card-title">{{ row[1] }}</h5>
+            <h6 class="card-subtitle"> role: {{ row[0] }}</h6>
+            <form action="invite_user.html" method="POST">
+            <input type="hidden" name="team" value="{{ row[1] }}">
+            <input type="hidden" name="role" value="{{ row[0] }}">
+            <input type="text" name="user" class="form-control" placeholder="invite user, use email">
+            <button type="submit" class="btn btn-primary">invite</button>
+            </form>
+        </div>   
+    </div>
     {% endif %}
     {% endfor %}
     </div>
+    <div class="row container">
+     <h1>
+        create a team
+    </h1>
+    <form action="create_team.html" method="POST">
+        <div class="container"> 
+            <label class="form-label">team name</label>
+            <input type="text" class="form-control" name="name">
+        <button type="submit" class="btn btn-primary">create</button>  
+        </div>
+    </form>   
+    </div>
+    
 </div>
 
  

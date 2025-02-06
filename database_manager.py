@@ -31,14 +31,15 @@ def get_log(team):
     if team == None:
         return False
     else:
-        for a in team:
-            devlog = quickcon("fetchall", 'log_data', 'SELECT id, timestamp, log_info, log_title, log_subtitle FROM devlog WHERE team=(?)', (a,))
+        devlog = quickcon("fetchall", 'log_data', 'SELECT id, timestamp, log_info, log_title, log_subtitle FROM devlog WHERE team=(?)', (team,))
         return devlog
+    
+def match_log(id, timestamp, log_title, log_subtitle):
+    quickcon("fetchone", 'log_data', 'SELECT id, timestamp, team, log_info, log_title, log_subtitle FROM devlog where id=(?) and timestamp=(?) and log_title=(?) and log_subtitle=(?)', (id, timestamp, log_title, log_subtitle,))
 
 def get_teams(user):
-    teams = quickcon("fetchall", 'teams', 'SELECT team FROM teams WHERE users=(?)', (user,))
-    for team in teams:
-        return team
+    team = quickcon("fetchall", 'teams', 'SELECT team FROM teams WHERE users=(?)', (user,))
+    return team
     
 def update_session(email, secret_key):
     quickcon("commit", 'user_info', 'UPDATE users SET current_session=(?) WHERE email=(?)', (secret_key, email))
@@ -50,7 +51,14 @@ def perm_level(email):
     level = quickcon("fetchall", 'teams', 'SELECT clearance, team FROM teams WHERE users=(?)', (email,))
     return level
 
+def accept_team(team, user):
+    quickcon("commit", 'teams', "UPDATE teams SET clearance='editor' WHERE team=(?) AND users=(?)", (team, user))
 
+def create_team(team, user, clearance):
+    quickcon("commit", 'teams', "INSERT INTO teams (team, users, clearance) VALUES (?,?,?)", (team, user, clearance))
+
+def insert_log(id, team, timestamp, log_title, log_subtitle, log_info):
+    quickcon("commit", 'log_data', "INSERT INTO devlog (id, team, timestamp, log_title, log_subtitle, log_info) VALUES (?,?,?,?,?,?)", (id, team, timestamp, log_title, log_subtitle, log_info))
 
 def quickcon(type, db, command, var):
     if type == 'fetchone':

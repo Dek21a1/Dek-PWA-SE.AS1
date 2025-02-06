@@ -1,9 +1,22 @@
 {% extends "layout.html" %} {% block content %}
 
-<div>
+<div class="container me-auto row">
     <h1>
         Welcome to Dev Web, {{ User }}
     </h1>
+    <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    select team
+        </button>
+    <ul class="dropdown-menu">
+    {% for row in teams %}
+    <form action="getlog.html" method="POST">
+    <li><button class="dropdown-item" type="submit">{{ row[0] }}</button></li>
+    <input type="hidden" name="name" value="{{ row[0] }}">
+    </form>
+    {% endfor %}
+    </ul>
+    </div>
     {% if not log %}
     <h3>
         you are not part of a team, use the button below to manage them
@@ -11,20 +24,29 @@
     <a class="btn btn-primary" href="team_manage.html" role="button">
         manage teams
     </a>
-    {% else %}
+    <div class="padding-box row container">
+     {% else %}
     {% for row in log %}
-    <div class="card" style="width: 18rem;">
+    <div class="card padding-box" style="width: 18rem;">
         <div class="card-body">
             <h5 class="card-title">{{ row[3] }}</h5>
-            <h6 class="card-subtitle">{{ row[2] }}</h6>
-            <p class="card-body">submitted by: {{ row[0] }}</p>
-            <p class="card-body">{{ row[1] }}</p>
+            <h6 class="card-subtitle">{{ row[4] }}</h6>
+            <p class="card-body">submitted by: {{ row[0] }} 
+                submitted on: {{ row[1] }}</p>
+            <form action="view_log.html" method="POST">
+            <input type="hidden" name="titlelog" value="{{ row[3] }}">
+            <input type="hidden" name="subtitlelog" value="{{ row[4] }}">
+            <input type="hidden" name="id" value="{{ row[0] }}">
+            <input type="hidden" name="timestamp" value="{{ row[1] }}">
             <a class="card-info">
-            <button class="btn btn-primary">details</button></a>
+            <button class="btn btn-primary" type="submit">details</button></a>
+            </form>
         </div>
     </div>
     {% endfor %}
-    {% endif %}
+    {% endif %}   
+    </div>
+    
 
 
 </div>
