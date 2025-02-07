@@ -10,6 +10,8 @@ run 'pip install -r requirements.txt'
 
 run 'python main/py'
 
+set panel to ports and right click ports -> change port protocol -> https
+
 open the ip to a browser
 
 ## test accounts
