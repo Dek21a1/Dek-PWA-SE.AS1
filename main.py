@@ -7,7 +7,6 @@ import secrets
 
 app = Flask(__name__)
 
-app.secret_key = b'#$jgberu@$%/gibg'
 
 app.config["SECRET_KEY"] = secrets.token_hex()
 app.config["SESSION_PERMANENT"] = False
