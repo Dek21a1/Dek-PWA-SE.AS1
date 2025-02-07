@@ -6,6 +6,8 @@ bcrypt
 
 requests
 ## how to run
+run 'pip install -r requirements.txt'
+
 run 'python main/py'
 
 open the ip to a browser
