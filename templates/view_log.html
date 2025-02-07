@@ -1,0 +1,32 @@
+{% extends "layout.html" %} {% block content %}
+
+
+<div class="container">
+    {% for row in log %}
+    <h1>
+        {{ row[4] }}
+    </h1>
+    <h2>
+        {{ row[5] }}
+    </h2>
+    <p class="host-grotesk-medium">
+        team: {{ row[2] }}
+    </p>
+    <p class="host-grotesk-medium">
+        submitted by: {{ row[0] }} 
+    </p>
+         
+    <p class="host-grotesk-medium">
+        submitted on: {{ row[1] }} 
+    </p>
+
+    <p>
+        {{ row[3] }}
+    </p>
+    {% endfor %}
+</div>
+
+
+
+
+{% endblock %}
