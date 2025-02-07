@@ -34,8 +34,9 @@ def get_log(team):
         devlog = quickcon("fetchall", 'log_data', 'SELECT id, timestamp, log_info, log_title, log_subtitle FROM devlog WHERE team=(?)', (team,))
         return devlog
     
-def match_log(id, timestamp, log_title, log_subtitle):
-    quickcon("fetchone", 'log_data', 'SELECT id, timestamp, team, log_info, log_title, log_subtitle FROM devlog where id=(?) and timestamp=(?) and log_title=(?) and log_subtitle=(?)', (id, timestamp, log_title, log_subtitle,))
+def match_log(id, timestamp, logtitle):
+    log = quickcon("fetchone", 'log_data', 'SELECT id, timestamp, team, log_info, log_title, log_subtitle FROM devlog where id=(?) and timestamp=(?) and log_title=(?)', (id, timestamp, logtitle,))
+    return log
 
 def get_teams(user):
     team = quickcon("fetchall", 'teams', 'SELECT team FROM teams WHERE users=(?)', (user,))

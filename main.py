@@ -109,10 +109,10 @@ def create_team():
 def view_log():
     if request.method=="POST":
         title = request.form['titlelog']
-        subtitle = request.form['subtitlelog']
+        name = request.form['id']
         date = request.form['timestamp']
-        user = request.form['id']
-        view = dbHandler.match_log(user, date, title, subtitle)
+        view = [dbHandler.match_log(name, date, title)]
+        print(view)
         return render_template('/view_log.html', log=view, cred=session['status'])
     
 @app.route('/submitlog.html', methods=['POST', 'GET'])
@@ -142,13 +142,17 @@ def get_teams():
         date = request.form['timestamp']
         team = session['team']
         dbHandler.insert_log(user, team, date, title_log, subtitle_log, log_info)
-        session.pop('team', None)
+        return submit_log()
         
 @app.route('/team.html', methods=['POST'])
 def team_name():
     if request.method=="POST":
         team = request.form['name']
         session['team'] = team
+        return submit_log()
+
+    
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    app.run(debug=True, host='0.0.0.0', port=5000, ssl_context=('cert.pem', 'key.pem'))
+    
